@@ -9,7 +9,7 @@
 
 
 // 在你的 Objective-C 视图控制器的 .m 文件中
-// #import "ObjectC_FaceAISDK-Swift.h" // 导入自动生成的 Swift 头文件
+#import "ObjectC_FaceAISDK-Swift.h" // 导入自动生成的 Swift 头文件
 
 @import ObjectC_FaceAISDK;  // 使用模块导入
 
@@ -34,9 +34,11 @@
     [self.view addSubview:button];
 }
 
-// 按钮触发的方法
+// 按钮触发的方法,来自AI辅助编程
 - (IBAction)buttonTapped:(id)sender {
-    
+    [SwiftUINavigator.shared presentSimpleSwiftUIFrom:self];
 }
+
+
 
 @end

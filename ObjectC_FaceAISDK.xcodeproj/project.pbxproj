@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -16,6 +16,7 @@
 		7C0760B52EC307F900302407 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C0760B42EC307F900302407 /* main.m */; };
 		86FDF3E16C2EE3CF985F6FAC /* Pods_ObjectC_FaceAISDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B11C75461DEB65D99C165C15 /* Pods_ObjectC_FaceAISDK.framework */; };
 		CF65FF3E2EC340A800FAC49A /* ToastUI in Frameworks */ = {isa = PBXBuildFile; productRef = CF65FF3D2EC340A800FAC49A /* ToastUI */; };
+		CF65FF402EC4B98300FAC49A /* SwiftUINavigator.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF65FF3F2EC4B98300FAC49A /* SwiftUINavigator.swift */; };
 		CF7824CA2EC33E3F002D143C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = CF7824C92EC33E3F002D143C /* Localizable.xcstrings */; };
 		CF7824D22EC33E4A002D143C /* AddFaceByUIImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7824CC2EC33E4A002D143C /* AddFaceByUIImage.swift */; };
 		CF7824D32EC33E4A002D143C /* AddFaceByCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF7824CB2EC33E4A002D143C /* AddFaceByCamera.swift */; };
@@ -41,6 +42,7 @@
 		7C0760B42EC307F900302407 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		95FCDDDF937FE2F09B90634A /* Pods-ObjectC_FaceAISDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectC_FaceAISDK.debug.xcconfig"; path = "Target Support Files/Pods-ObjectC_FaceAISDK/Pods-ObjectC_FaceAISDK.debug.xcconfig"; sourceTree = "<group>"; };
 		B11C75461DEB65D99C165C15 /* Pods_ObjectC_FaceAISDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectC_FaceAISDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CF65FF3F2EC4B98300FAC49A /* SwiftUINavigator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUINavigator.swift; sourceTree = "<group>"; };
 		CF7824C92EC33E3F002D143C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		CF7824CB2EC33E4A002D143C /* AddFaceByCamera.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFaceByCamera.swift; sourceTree = "<group>"; };
 		CF7824CC2EC33E4A002D143C /* AddFaceByUIImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFaceByUIImage.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				7C0760A82EC307F700302407 /* ViewController.h */,
 				CF7824C92EC33E3F002D143C /* Localizable.xcstrings */,
 				7C0760A92EC307F700302407 /* ViewController.m */,
+				CF65FF3F2EC4B98300FAC49A /* SwiftUINavigator.swift */,
 				7C0760AB2EC307F700302407 /* Main.storyboard */,
 				7C0760AE2EC307F900302407 /* Assets.xcassets */,
 				7C0760B02EC307F900302407 /* LaunchScreen.storyboard */,
@@ -170,7 +173,7 @@
 				};
 			};
 			buildConfigurationList = 7C07609A2EC307F700302407 /* Build configuration list for PBXProject "ObjectC_FaceAISDK" */;
-			compatibilityVersion = "Xcode 14.0";
+			compatibilityVersion = "Xcode 15.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -277,6 +280,7 @@
 				CF7824D52EC33E4A002D143C /* VerifyFaceView.swift in Sources */,
 				CF7824D62EC33E4A002D143C /* ImageDetailView.swift in Sources */,
 				CF7824D72EC33E4A002D143C /* FaceAINaviView.swift in Sources */,
+				CF65FF402EC4B98300FAC49A /* SwiftUINavigator.swift in Sources */,
 				7C0760A72EC307F700302407 /* SceneDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -436,6 +440,7 @@
 				DEVELOPMENT_TEAM = G35M5X479Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ObjectC_FaceAISDK/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "OC 演示需要相机权限";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -471,6 +476,7 @@
 				DEVELOPMENT_TEAM = G35M5X479Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ObjectC_FaceAISDK/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "OC 演示需要相机权限";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
