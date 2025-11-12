@@ -34,7 +34,8 @@
     [self.view addSubview:button];
 }
 
-// 按钮触发的方法,来自AI辅助编程
+
+// 按钮触发的方法,来自AI辅助编程,更多问题参考DeepSeek，ChatGPT
 - (IBAction)buttonTapped:(id)sender {
     [SwiftUINavigator.shared presentSimpleSwiftUIFrom:self];
 }
