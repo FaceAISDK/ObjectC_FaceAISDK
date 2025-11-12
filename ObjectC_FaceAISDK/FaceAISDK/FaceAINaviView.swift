@@ -14,6 +14,7 @@ struct FaceAINaviView: View {
     //录入保存的FaceID 值。一般是你的业务体系中个人的唯一编码，比如账号 身份证
     private let faceID="yourFaceIDValue";
     
+    
     var body: some View {
         NavigationStack(path: $navigationPath) {
             ZStack {
