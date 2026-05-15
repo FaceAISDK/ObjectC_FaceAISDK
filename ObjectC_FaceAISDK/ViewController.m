@@ -17,7 +17,7 @@
     [super viewDidLoad];
     self.view.backgroundColor = [UIColor systemBackgroundColor];
     self.title = @"FaceAISDK ObjC Demo";
-    
+
     NSArray *titles = @[
         NSLocalizedString(@"Add Face By Camera", nil),
         NSLocalizedString(@"Add Face From Album", nil),
@@ -28,7 +28,7 @@
         NSLocalizedString(@"About us", nil),
         @"→ FaceAISDK Swift Demo"
     ];
-    
+
     CGFloat y = 120;
     for (NSInteger i = 0; i < titles.count; i++) {
         UIButton *btn = [UIButton buttonWithType:UIButtonTypeSystem];
@@ -84,6 +84,7 @@
         default:
             return;
     }
+
     if (vc) {
         vc.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:vc animated:YES completion:nil];
