@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '16.0'
+platform :ios, '15.5'
 
 target 'ObjectC_FaceAISDK' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -17,7 +17,6 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
-      # 统一模拟器排除 arm64 架构（解决 M1/M2 Mac 上的模拟器运行问题）
       config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
     end
   end

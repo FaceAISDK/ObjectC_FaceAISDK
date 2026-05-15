@@ -45,6 +45,7 @@
 		7C0760B12EC307F900302407 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7C0760B32EC307F900302407 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C0760B42EC307F900302407 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		7C313AAE2FB7131A00139DB1 /* ObjectC_FaceAISDK-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjectC_FaceAISDK-Bridging-Header.h"; sourceTree = "<group>"; };
 		7CB7AFE92FB6EC0A003E82D9 /* CustomToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomToastView.swift; sourceTree = "<group>"; };
 		7CB7AFEB2FB6EC0A003E82D9 /* VerifyFaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyFaceView.swift; sourceTree = "<group>"; };
 		7CB7AFED2FB6EC0A003E82D9 /* AddFaceByCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFaceByCamera.swift; sourceTree = "<group>"; };
@@ -97,6 +98,7 @@
 			isa = PBXGroup;
 			children = (
 				7CB7AFE82FB6EC0A003E82D9 /* FaceAISDK */,
+				7C313AAE2FB7131A00139DB1 /* ObjectC_FaceAISDK-Bridging-Header.h */,
 				7C0760A22EC307F700302407 /* AppDelegate.h */,
 				7C0760A32EC307F700302407 /* AppDelegate.m */,
 				7C0760A52EC307F700302407 /* SceneDelegate.h */,
@@ -469,7 +471,9 @@
 				DEVELOPMENT_TEAM = G35M5X479Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ObjectC_FaceAISDK/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "OC 演示需要相机权限";
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要访问相机以完成人脸录入和活体检测功能";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要保存照片到相册";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要访问相册以通过图片录入人脸信息";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -481,7 +485,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.faceaisdk.ObjectC-FaceAISDK";
+				PRODUCT_BUNDLE_IDENTIFIER = com.faceaisdk.ObjectC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = YES;
@@ -506,7 +510,9 @@
 				DEVELOPMENT_TEAM = G35M5X479Y;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = ObjectC_FaceAISDK/Info.plist;
-				INFOPLIST_KEY_NSCameraUsageDescription = "OC 演示需要相机权限";
+				INFOPLIST_KEY_NSCameraUsageDescription = "需要访问相机以完成人脸录入和活体检测功能";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "需要保存照片到相册";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "需要访问相册以通过图片录入人脸信息";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -518,7 +524,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.faceaisdk.ObjectC-FaceAISDK";
+				PRODUCT_BUNDLE_IDENTIFIER = com.faceaisdk.ObjectC;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_INSTALL_OBJC_HEADER = YES;
