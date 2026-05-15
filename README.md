@@ -1,8 +1,5 @@
-## 演示如何在ObjectiveC 项目中集成使用FaceAISDK
+## ObjectiveC 项目中集成使用FaceAISDK
+支持ObjectC和Swift混合使用，支持iOS[15,26]
+Swift相关SDK演示代码更新请移步主页：[FaceAISDK/](https://github.com/FaceAISDK/FaceAISDK_iOS)  
+演示的SDK版本可能不是最新的，请查看主页
 
-演示的SDK版本可能不是最新的，Swift相关SDK演示代码更新请移步：[https://github.com/FaceAISDK/](https://github.com/FaceAISDK/FaceAISDK_iOS)  
-运行本Demo还需要安装 Swift ToastUI ， 参考 https://github.com/quanshousio/ToastUI  
-
-
-
-- 本Demo 使用Xcode 16.2 编辑，并在XCode 2* 验证通过✅
