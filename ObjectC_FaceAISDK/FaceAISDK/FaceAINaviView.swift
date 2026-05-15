@@ -32,7 +32,7 @@ struct FaceAINaviView: View {
                                 addFacePerformanceMode: 1,
                                 needShowConfirmDialog: true,
                                 onDismiss: { result, feature in
-                                    print("🎆 AddFace   Status: \(result), Feature: \(feature)")
+                                    print("😊 AddFace Status: \(result), Feature: \(feature)")
                                 }
                             )) {
                                 MenuRowView(icon: "camera.viewfinder", title: "Add Face By Camera")
@@ -42,7 +42,7 @@ struct FaceAINaviView: View {
                             NavigationLink(destination: AddFaceByImage(
                                 faceID: faceID,
                                 onDismiss: { result, feature in
-                                    print("🎆  AddFace  Status: \(result), Feature: \(feature ?? "")")
+                                    print("😊   AddFace  Status: \(result), Feature: \(feature ?? "")")
                                 }
                             )) {
                                 MenuRowView(icon: "photo.on.rectangle.angled", title: "Add Face From Album")
@@ -70,7 +70,7 @@ struct FaceAINaviView: View {
                                 motionLivenessSteps:2,
                                 
                                 onDismiss: {code, similarity, liveness in
-                                    print("🎆 Face Verify  Status: \(code), Similarity: \(similarity), Liveness: \(liveness)")
+                                    print("😊  Face Verify  Status: \(code), Similarity: \(similarity), Liveness: \(liveness)")
                                 }
                             )) {
                                 MenuRowView(icon: "faceid", title: "Face Verify & Liveness")
@@ -89,7 +89,7 @@ struct FaceAINaviView: View {
                                 // Number of motion steps. 动作步骤个数。
                                 motionLivenessSteps:2,
                                 onDismiss: { code,liveness in
-                                    print("🎆 Liveness Result: \(code), Liveness Score: \(liveness)")
+                                    print("😊  Liveness Result: \(code), Liveness Score: \(liveness)")
                                 }
                             )) {
                                 MenuRowView(icon: "person.crop.circle.badge.checkmark", title: "ONLY Liveness Detection")
@@ -119,7 +119,6 @@ struct FaceAINaviView: View {
 
                         Spacer().frame(height: 30)
                         
-                        // 打开关于我们的外部链接 (保持简洁风格)
                         Button(action: {
                             if let url = URL(string: "https://faceaisdk.github.io/index") {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
