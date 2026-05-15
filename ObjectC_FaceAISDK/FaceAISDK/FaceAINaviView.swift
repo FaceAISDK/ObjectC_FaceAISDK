@@ -1,173 +1,214 @@
-// ContentView.swift
 import SwiftUI
 import FaceAISDK_Core
-import ToastUI
 
 /**
- * iOS  FaceAISDK 功能导航页面
+ * iOS FaceAISDK navigation page, UI is for reference only.
+ * iOS FaceAISDK 功能导航页面，UI 仅供参考。
  */
 struct FaceAINaviView: View {
-    @State private var navigationPath = NavigationPath()
-    @State private var addFaceResult: String?
-    @State private var faceVerifyResult: FaceVerifyResult?
+    @Environment(\.dismiss) private var dismiss
     
-    //录入保存的FaceID 值。一般是你的业务体系中个人的唯一编码，比如账号 身份证
-    private let faceID="yourFaceIDValue";
+    // The FaceID value used for saving the face feature. Usually, it's the unique identifier of a person in your business system, such as an account ID or ID card number.
+    // 录入保存的 FaceID 值。一般是你的业务体系中个人的唯一编码，比如账号或身份证号。
+    private let faceID = "yourFaceID";
     
+    var onDismiss: (() -> Void)?
+
     var body: some View {
-        NavigationStack(path: $navigationPath) {
+        NavigationView {
             ZStack {
+                // 背景色铺满
                 Color.faceMain.ignoresSafeArea()
-                VStack(spacing: 20) {
-                    
-                    //通过SDK相机录入人脸
-                    Button("Add Face By Camera") {
-                        navigationPath.append(FaceAINaviDestination.AddFacePageView(faceID))
-                    }
-                    .font(.system(size: 20).bold())
-                    .controlSize(.large)
-                    .foregroundColor(Color.white)
-                    .padding(.top,30)
-                    
-                    //通过相册录入人脸
-                    Button("Add Face From Album") {
-                        navigationPath.append(FaceAINaviDestination.AddFaceFromAlbum(faceID))
-                    }
-                    .font(.system(size: 19).bold())
-                    .controlSize(.large)
-                    .foregroundColor(Color.white)
-                    .padding(.top,15)
-                    
-                    //人脸识别+活体检测
-                    Button("Face Verify and Liveness Detection") {
-                        navigationPath.append(FaceAINaviDestination.VerifyFacePageView(faceID))
-                    }
-                    .font(.system(size: 20).bold())
-                    .foregroundColor(Color.white)
-                    .padding(.top,22)
-                    
-                    //仅动作活体检测
-                    Button("ONLY Motion Liveness Detection") {
-                        navigationPath.append(FaceAINaviDestination.LivenessView(faceID))
-                    }
-                    .font(.system(size: 20).bold())
-                    .foregroundColor(Color.white)
-                    .padding(.top,20)
-                    
-                    //判断人脸图片是否存在
-                    Button("is Face Image Exist") {
-                        print("isFaceImageExist？ ：\(FaceImageManger.isFaceImageExist(faceID: faceID))")
-                    }
-                    .font(.system(size: 18).bold())
-                    .foregroundColor(Color.white)
-                    .padding(.top,33)
-
-                    //人脸图片转为Base64
-                    Button("Convert Face Image to Base64") {
-                        print("Base64：\(String(describing: FaceImageManger.imageFromDocumentsToBase64(fileName: faceID)))")
-                    }
-                    .foregroundColor(Color.white)
-                    .padding(.top,11)
-                    .font(.system(size: 18).bold())
-
-                    //保存Base64人脸图片
-                    Button("Save Base64 Face Images") {
-                        print("Save Path：\(String(describing: FaceImageManger.saveBase64ImageToLocal(base64String: base64Data, fileName: faceID)))")
-                    }
-                    .foregroundColor(Color.white)
-                    .padding(.top,11)
-                    .font(.system(size: 18).bold())
-
-                    Spacer()
-                    
-                    Button("About us"){
-                        // 记得切换成iOS 的介绍版本
-                        let url = URL(string: "https://mp.weixin.qq.com/s/R43s70guLqxA6JPEdWtjcA")
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            if UIApplication.shared.canOpenURL(url!) {
-                                UIApplication.shared.open(url!)
+                
+                // 使用 ScrollView 适配小屏幕机型
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 18) {
+                        
+                        // --- 模块一：人脸录入 ---
+                        VStack(spacing: 14) {
+                            // 通过 SDK 相机录入人脸
+                            NavigationLink(destination: AddFaceByCamera(
+                                faceID: faceID,
+                                addFacePerformanceMode: 1,
+                                needShowConfirmDialog: true,
+                                onDismiss: { result, feature in
+                                    print("🎆 AddFace   Status: \(result), Feature: \(feature)")
+                                }
+                            )) {
+                                MenuRowView(icon: "camera.viewfinder", title: "Add Face By Camera")
+                            }
+                            
+                            // 通过图片录入人脸信息
+                            NavigationLink(destination: AddFaceByImage(
+                                faceID: faceID,
+                                onDismiss: { result, feature in
+                                    print("🎆  AddFace  Status: \(result), Feature: \(feature ?? "")")
+                                }
+                            )) {
+                                MenuRowView(icon: "photo.on.rectangle.angled", title: "Add Face From Album")
                             }
                         }
+                        .padding(.top, 20)
+                        
+                        // --- 模块二：识别与活体 ---
+                        VStack(spacing: 14) {
+                            // 人脸识别 + 活体检测
+                            NavigationLink(destination: VerifyFaceView(
+                                faceID: faceID,
+                                // Threshold range [0.8, 0.9].  阈值范围【0.8，0.9】。
+                                threshold: 0.83,
+                                
+                                // 1. Motion Liveness, 2. Motion + Color, 3. Color, 4. Silent Liveness only (the first three all include silent liveness).
+                                // 1.动作活体 2.动作+炫彩 3.炫彩 4.仅静默活体(前三种都会带静默)。
+                                livenessType: 4,
+                                // 1. Open mouth, 2. Smile, 3. Blink, 4. Shake head, 5. Nod.
+                                // 1.张嘴 2.微笑 3.眨眼 4.摇头 5.点头。
+                                motionLiveness: "1,2,3,4,5",
+                                // Timeout: 3-22 seconds.  超时时间：3-22秒。
+                                motionLivenessTimeOut: 11,
+                                // Number of motion steps.  动作步骤个数。
+                                motionLivenessSteps:2,
+                                
+                                onDismiss: {code, similarity, liveness in
+                                    print("🎆 Face Verify  Status: \(code), Similarity: \(similarity), Liveness: \(liveness)")
+                                }
+                            )) {
+                                MenuRowView(icon: "faceid", title: "Face Verify & Liveness")
+                            }
+                            
+                            // 仅活体检测
+                            NavigationLink(destination: LivenessDetectView(
+                                // 1. Motion Liveness, 2. Motion + Color, 3. Color, 4. Silent Liveness only (the first three all include silent liveness).
+                                // 1.动作活体 2.动作+炫彩 3.炫彩 4.仅静默活体(前三种都会带静默)。
+                                livenessType: 1,
+                                // 1. Open mouth, 2. Smile, 3. Blink, 4. Shake head, 5. Nod.
+                                // 1.张嘴 2.微笑 3.眨眼 4.摇头 5.点头。
+                                motionLiveness: "1,2,3,4,5",
+                                // Timeout in seconds. 超时时间(秒)。
+                                motionLivenessTimeOut: 5,
+                                // Number of motion steps. 动作步骤个数。
+                                motionLivenessSteps:2,
+                                onDismiss: { code,liveness in
+                                    print("🎆 Liveness Result: \(code), Liveness Score: \(liveness)")
+                                }
+                            )) {
+                                MenuRowView(icon: "person.crop.circle.badge.checkmark", title: "ONLY Liveness Detection")
+                            }
+                        }
+                        .padding(.top, 8)
+                        
+                        // --- 模块三：功能辅助测试 ---
+                        VStack(spacing: 14) {
+                            // 判断 faceID 对应人脸特征值是否存在
+                            Button(action: {
+                                guard let faceFeature = UserDefaults.standard.string(forKey: faceID) else {
+                                    print("isFaceFeatureExist？ ： No ! ")
+                                    return
+                                }
+                                print("\n😊FaceFeature: \(faceFeature)")
+                            }) {
+                                MenuRowView(icon: "magnifyingglass.circle", title: "Is Face Feature Exist", showChevron: false)
+                            }
+                            
+                            // 验证两张人脸的相似度
+                            NavigationLink(destination: VerifyTwoFaceSimiView()) {
+                                MenuRowView(icon: "person.2.crop.square.stack", title: "Verify Two Face Similarity")
+                            }
+                        }
+                        .padding(.top, 8)
+
+                        Spacer().frame(height: 30)
+                        
+                        // 打开关于我们的外部链接 (保持简洁风格)
+                        Button(action: {
+                            if let url = URL(string: "https://faceaisdk.github.io/index") {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    if UIApplication.shared.canOpenURL(url) {
+                                        UIApplication.shared.open(url)
+                                    }
+                                }
+                            }
+                        }) {
+                            Text("About us")
+                                .font(.system(size: 15, weight: .medium))
+                                .foregroundColor(Color.white.opacity(0.8))
+                                .underline()
+                        }
+                        .padding(.bottom, 40)
+                        .padding(.top, 22)
                     }
-                    .foregroundColor(Color.white)
-                    .font(.system(size: 16).bold())
+                    .padding(.horizontal, 22)
+                    .padding(.top, 22)
                 }
             }
-            .navigationTitle("🧭 FaceAISDK")
-            .navigationDestination(for: FaceAINaviDestination.self) { destination in
-                switch destination {
-                    
-                case .AddFacePageView(let param):
-                    AddFaceByCamera(faceID: param,onDismiss: { result in
-                        addFaceResult = result
-                        if !navigationPath.isEmpty { // 检查路径是否为空
-                            navigationPath.removeLast()
+            .navigationBarTitleDisplayMode(.inline)
+            // 顶部导航栏添加关闭按钮
+            .toolbar {
+                ToolbarItem(placement: .navigationBarLeading) {
+                    Button(action: {
+                        if let onDismiss {
+                            onDismiss()
+                        } else {
+                            dismiss()
                         }
-                    })
-                    
-                case .AddFaceFromAlbum(let param):
-
-                    AddFaceByUIImage(faceID: param,onDismiss: { result in
-                        addFaceResult = result
-                        if !navigationPath.isEmpty { // 检查路径是否为空
-                            navigationPath.removeLast()
-                        }
-                    })
-                
-                case .VerifyFacePageView(let param):
-                    //设置的相似度阈值threshold越高，对人脸角度，环境光线和摄像头宽动态要求越高
-                    VerifyFaceView(faceID: param,threshold: 0.85, onDismiss: { result in
-                        faceVerifyResult = result
-                        
-                        // faceVerifyResult.code
-                        // -2  人脸识别动作活体检测超过10秒
-                        // -1  多次切换人脸或检查失败
-                        // 0   默认值
-                        // 1   人脸识别对比成功大于设置的threshold
-                        // 2   人脸识别对比识别小于设置的threshold
-                        print("verifyFaceView Result ：\(faceVerifyResult?.tips) \(faceVerifyResult?.code)")
-                        
-                        if !navigationPath.isEmpty { // 检查路径是否为空
-                            navigationPath.removeLast()
-                        }
-                    })
-                case .LivenessView(let param):
-                    
-                    // faceVerifyResult.code
-                    // -2  人脸识别动作活体检测超过10秒
-                    // -1  多次切换人脸或检查失败
-                    // 0   默认值
-                    // 3   动作活体检测成功
-                    LivenessDetectView(faceID: param,onDismiss: { result in
-                        print("Motion Liveness Result：\(result.tips) \(result.code)")
-                        if !navigationPath.isEmpty { // 检查路径是否为空
-                            navigationPath.removeLast()
-                        }
-                    })
-                    
+                    }) {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 13, weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(8)
+                            .background(Circle().fill(Color.white.opacity(0.2)))
+                    }
                 }
             }
         }
+        .navigationViewStyle(.stack)
         .onAppear {
-            //和合适的场景，提前一点初始化FaceAISDK
-            FaceAISDK.initSDK()
+            // 视图显示时将屏幕亮度调至最大
+            ScreenBrightnessHelper.shared.maximizeBrightness()
+            withAnimation(.easeInOut(duration: 0.3)) {
+                UIScreen.main.brightness = 1.0
+            }
         }
     }
+}
+
+// MARK: - 统一的菜单行组件
+/// 用于美化导航列表的按钮卡片视图
+struct MenuRowView: View {
+    var icon: String
     
+    // 【修复点】：将 String 改为 LocalizedStringKey，这样 SwiftUI 就会自动去 Localizable.strings 查找多语言
+    var title: LocalizedStringKey
+    
+    var showChevron: Bool = true // 是否显示右侧的小箭头
+    
+    var body: some View {
+        HStack(spacing: 16) {
+            Image(systemName: icon)
+                .font(.system(size: 22, weight: .light))
+                .frame(width: 30)
+            
+            Text(title)
+                .font(.system(size: 17, weight: .semibold))
+            
+            Spacer()
+            
+            if showChevron {
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 14, weight: .semibold))
+                    .foregroundColor(Color.white.opacity(0.5))
+            }
+        }
+        .foregroundColor(.white)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 18)
+        .background(
+            RoundedRectangle(cornerRadius: 16)
+                .fill(Color.white.opacity(0.15))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 16)
+                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+        )
+    }
 }
-
-enum FaceAINaviDestination: Hashable {
-    case AddFaceFromAlbum(String)
-    case AddFacePageView(String)
-    case VerifyFacePageView(String)
-    case LivenessView(String)
-}
-
-#Preview {
-    FaceAINaviView()
-}
-
-
-
-// Base 64 编码图片
-private let base64Data="data:image/jpeg;base64,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"
