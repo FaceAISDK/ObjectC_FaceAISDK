@@ -2,6 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>需要访问相机以完成人脸录入和活体检测功能</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>需要访问相册以通过图片录入人脸信息</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>需要保存照片到相册</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
