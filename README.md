@@ -8,10 +8,8 @@ FaceAISDK_iOS SDK是设备端可完全离线不需联网实现人脸录入、活
 
 ## 集成步骤
 
-SDK默认的开发环境为Xcode 15.2,Swift 5.9；支持ObjectC和Swift混合使用，支持iOS[15,26]  
-ObjectC 演示集成SDK API Demo见：https://github.com/FaceAISDK/ObjectC_FaceAISDK
-Swift 演示集成SDK API Demo见：https://github.com/FaceAISDK/FaceAISDK_iOS
-
+SDK 默认开发环境为 Xcode 15.2 (Swift 5.9)，并已验证兼容至 Xcode 26.5 (Swift 6.3)。UI 层全量采用 SwiftUI 构建；  
+全面支持 iOS/iPadOS [15, 26]，还可原生运行于搭载 Apple Silicon（M系列芯片）的 Mac 设备 
 
   ```
     pod 'FaceAISDK_Core', :git => 'https://github.com/FaceAISDK/FaceAISDK_Core.git', :tag => '2026.04.27'
@@ -24,7 +22,7 @@ Swift 演示集成SDK API Demo见：https://github.com/FaceAISDK/FaceAISDK_iOS
     X Thread 1: EXC BAD ACCESS (code=1, address=0x800008)
   ```
   在Xcode菜单Product执行clean all Issues后
-  再次执行pod命令升级FaceAISDK:  **pod update FaceAISDK_Core** （Demo可直接pod install）
+  再次执行pod命令升级FaceAISDK:  **pod update FaceAISDK_Core**
 
 ### 2. 确认电脑能科学上网翻墙后，使用Pod命令安装FaceAISDK和相关依赖库
   一般pod install 命令能完整的下载同步安装好所有依赖，也可以pod update FaceAISDK_Core仅更新人脸识别SDK
@@ -60,7 +58,9 @@ Swift 演示集成SDK API Demo见：https://github.com/FaceAISDK/FaceAISDK_iOS
 
 ## 其他说明 
   
-  **iOS SDK：** https://github.com/FaceAISDK/FaceAISDK_iOS  
+  **iOS纯Swift：** https://github.com/FaceAISDK/FaceAISDK_iOS  
+  **iOS OC混编：** https://github.com/FaceAISDK/FaceAISDK_iOS  
+
   **Android：** https://github.com/FaceAISDK/FaceAISDK_Android     
   **Flutter 插件：** https://github.com/FaceAISDK/FaceAISDK_Flutter_Plugin  
   **uniApp UTS插件：** https://github.com/FaceAISDK/FaceAISDK_uniapp_UTS  
