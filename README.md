@@ -24,7 +24,7 @@ Swift 演示集成SDK API Demo见：https://github.com/FaceAISDK/FaceAISDK_iOS
     X Thread 1: EXC BAD ACCESS (code=1, address=0x800008)
   ```
   在Xcode菜单Product执行clean all Issues后
-  再次执行pod命令升级FaceAISDK:  **pod update FaceAISDK_Core**
+  再次执行pod命令升级FaceAISDK:  **pod update FaceAISDK_Core** （Demo可直接pod install）
 
 ### 2. 确认电脑能科学上网翻墙后，使用Pod命令安装FaceAISDK和相关依赖库
   一般pod install 命令能完整的下载同步安装好所有依赖，也可以pod update FaceAISDK_Core仅更新人脸识别SDK
