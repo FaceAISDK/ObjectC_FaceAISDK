@@ -5,9 +5,7 @@ import os.log
 import UIKit
 #endif
 
-// MARK: - TTSPlayer
-
-/// iOS 原生语音播报管理器（兼容 iOS 15 ~ 26）
+// MARK: - TTSPlayer 20260703
 final class TTSPlayer: NSObject {
 
     static let shared = TTSPlayer()
@@ -30,6 +28,7 @@ final class TTSPlayer: NSObject {
 
     var onStateChanged: ((State) -> Void)?
 
+    /// State 仅限在主线程读写，确保外部 UI 绑定的绝对安全
     private(set) var state: State = .idle {
         didSet {
             guard state != oldValue else { return }
@@ -46,16 +45,22 @@ final class TTSPlayer: NSObject {
 
     private let synthesizer = AVSpeechSynthesizer()
     private let log: OSLog
+    
+    /// 专用串行队列：保证去重、音频会话、播报状态处理顺序一致。
+    /// 使用 userInitiated 降低摄像头实时提示场景中的排队延迟。
+    private let workQueue = DispatchQueue(label: "com.faceAI.sdk.ttsPlayer", qos: .userInitiated)
 
+    // 以下变量现在仅在 workQueue 中访问，天然线程安全
     private var isSessionActive = false
     private var pendingDeactivation: DispatchWorkItem?
-    private let sessionDeactivationDelay: TimeInterval = 1.5
+    /// 人脸检测过程中提示通常连续出现，保活稍久一点可以避免每一句都重新激活 AudioSession 导致“慢半拍”。
+    private let sessionDeactivationDelay: TimeInterval = 8.0
 
     private var voiceCache: [String: AVSpeechSynthesisVoice] = [:]
 
-    private var lastSpokenText: String?
-    private var lastSpokenTime: CFAbsoluteTime = 0
-    private let dedupInterval: TimeInterval = 0.5
+    /// 只去重“相邻两次”的相同文字：A、A 只播第一次；A、B、A 中第二个 A 仍允许播。
+    private var lastAcceptedTextKey: String?
+    private var preparedLanguages = Set<String>()
 
     private var interruptedBySystem = false
 
@@ -74,69 +79,91 @@ final class TTSPlayer: NSObject {
 
     // MARK: - Public API
 
+    /// 预热音频会话和语音资源，建议在页面 onAppear 时调用。
+    /// 这样第一次真正 speak 时不用再同步做 voice 查询和 AudioSession 激活，能明显减少首句“慢半拍”。
+    func prepare(language: String? = nil) {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
+
+            self.activateSessionIfNeeded()
+
+            let lang = self.normalizedLanguage(language)
+            guard !self.preparedLanguages.contains(lang) else { return }
+
+            _ = self.cachedVoice(for: lang)
+            self.preparedLanguages.insert(lang)
+        }
+    }
+
     /// 播报文本
-    /// - Parameters:
-    ///   - text: 播报内容
-    ///   - language: 语言代码，nil 则自动匹配
-    ///   - rate: 语速。为了更像真人，默认值 0.5
-    ///   - pitch: 音调。默认 0.98，略微低沉，减少电子尖锐感
-    ///   - policy: 播报策略
     func speak(_ text: String?,
                language: String? = nil,
-               rate: Float = 0.5,
+               rate: Float = 0.50,
                pitch: Float = 0.98,
                policy: Policy = .dropIfBusy) {
-        guard let text = text, !text.isEmpty else { return }
+        let originalText = text ?? ""
+        let textKey = normalizedTextKey(originalText)
+        guard !textKey.isEmpty else { return }
 
-        guard Thread.isMainThread else {
-            DispatchQueue.main.async { [weak self] in
-                self?.speak(text, language: language, rate: rate, pitch: pitch, policy: policy)
-            }
-            return
-        }
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
 
-        let now = CFAbsoluteTimeGetCurrent()
-        if text == lastSpokenText && (now - lastSpokenTime) < dedupInterval {
-//            os_log("Dedup, skipping: %{public}@", log: log, type: .info, text)
-            return
-        }
-
-        switch policy {
-        case .interrupt:
-            synthesizer.stopSpeaking(at: .immediate)
-        case .enqueue:
-            break
-        case .dropIfBusy:
-            if synthesizer.isSpeaking {
-//                os_log("Busy, dropping: %{public}@", log: log, type: .info, text)
+            // 相邻重复文本只播第一次，避免 SwiftUI body 重复刷新导致同一句反复播报。
+            if textKey == self.lastAcceptedTextKey {
                 return
             }
+
+            switch policy {
+            case .interrupt:
+                self.synthesizer.stopSpeaking(at: .immediate)
+
+            case .enqueue:
+                break
+
+            case .dropIfBusy:
+                // 默认策略：前一句没播完时，不打断，也不追加队列，避免提示越排越滞后。
+                guard !self.synthesizer.isSpeaking && !self.synthesizer.isPaused else { return }
+            }
+
+            self.lastAcceptedTextKey = textKey
+
+            let lang = self.normalizedLanguage(language)
+            self.activateSessionIfNeeded()
+
+            let utterance = AVSpeechUtterance(string: originalText.trimmingCharacters(in: .whitespacesAndNewlines))
+            let clampedRate = min(max(rate, 0), 1)
+            utterance.rate = AVSpeechUtteranceMinimumSpeechRate
+                + clampedRate * (AVSpeechUtteranceMaximumSpeechRate - AVSpeechUtteranceMinimumSpeechRate)
+            utterance.pitchMultiplier = min(max(pitch, 0.5), 2.0)
+
+            // 去掉人为前置延迟，缩短后置延迟，减少连续提示时的“慢半拍”。
+            utterance.preUtteranceDelay = 0
+            utterance.postUtteranceDelay = 0.03
+            utterance.voice = self.cachedVoice(for: lang)
+
+            self.synthesizer.speak(utterance)
         }
+    }
 
-        activateSessionIfNeeded()
+    /// 清空相邻去重记录。
+    /// 如果一个流程结束后，希望下次进入页面同一句提示仍能重新播放，可在 onAppear/onDisappear 调用。
+    func resetDuplicateHistory() {
+        workQueue.async { [weak self] in
+            self?.lastAcceptedTextKey = nil
+        }
+    }
 
-        let utterance = AVSpeechUtterance(string: text)
-        let clampedRate = min(max(rate, 0), 1)
-        utterance.rate = AVSpeechUtteranceMinimumSpeechRate
-            + clampedRate * (AVSpeechUtteranceMaximumSpeechRate - AVSpeechUtteranceMinimumSpeechRate)
-        
-        // 1. 调整音调，限制在合理范围内 (0.5 - 2.0)
-        utterance.pitchMultiplier = min(max(pitch, 0.5), 2.0)
-        
-        // 2. 增加发音前后的延迟，模拟真人换气和语义停顿
-        utterance.preUtteranceDelay = 0.05
-        utterance.postUtteranceDelay = 0.15
-        
-        utterance.voice = cachedVoice(for: language)
-
-        lastSpokenText = text
-        lastSpokenTime = now
-
-        synthesizer.speak(utterance)
+    /// 停止当前播报，并清空已排队的语音。
+    func stop() {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
+            self.stopSynthesizerIfActive()
+        }
     }
 
     func pause() {
-        onMainThread {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
             if self.synthesizer.isSpeaking {
                 self.synthesizer.pauseSpeaking(at: .word)
             }
@@ -144,7 +171,8 @@ final class TTSPlayer: NSObject {
     }
 
     func resume() {
-        onMainThread {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
             if self.synthesizer.isPaused {
                 self.activateSessionIfNeeded()
                 self.synthesizer.continueSpeaking()
@@ -152,21 +180,24 @@ final class TTSPlayer: NSObject {
         }
     }
 
-    func stop() {
-        onMainThread {
-            if self.synthesizer.isSpeaking || self.synthesizer.isPaused {
-                self.synthesizer.stopSpeaking(at: .immediate)
-            }
+    func release() {
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
+            self.stopSynthesizerIfActive()
+            self.deactivateSessionNow()
+            self.voiceCache.removeAll()
+            self.preparedLanguages.removeAll()
+            self.lastAcceptedTextKey = nil
+        }
+    }
+    
+    private func stopSynthesizerIfActive() {
+        if synthesizer.isSpeaking || synthesizer.isPaused {
+            synthesizer.stopSpeaking(at: .immediate)
         }
     }
 
-    func release() {
-        stop()
-        deactivateSessionNow()
-        voiceCache.removeAll()
-    }
-
-    // MARK: - Audio Session
+    // MARK: - Audio Session (仅在 workQueue 内调用)
 
     private func activateSessionIfNeeded() {
         pendingDeactivation?.cancel()
@@ -189,7 +220,7 @@ final class TTSPlayer: NSObject {
             self?.deactivateSessionNow()
         }
         pendingDeactivation = item
-        DispatchQueue.main.asyncAfter(deadline: .now() + sessionDeactivationDelay, execute: item)
+        workQueue.asyncAfter(deadline: .now() + sessionDeactivationDelay, execute: item)
     }
 
     private func deactivateSessionNow() {
@@ -223,26 +254,31 @@ final class TTSPlayer: NSObject {
               let typeValue = info[AVAudioSessionInterruptionTypeKey] as? UInt,
               let type = AVAudioSession.InterruptionType(rawValue: typeValue) else { return }
 
-        switch type {
-        case .began:
-            interruptedBySystem = synthesizer.isSpeaking || synthesizer.isPaused
-            isSessionActive = false
+        let optionsValue = info[AVAudioSessionInterruptionOptionKey] as? UInt ?? 0
+        let options = AVAudioSession.InterruptionOptions(rawValue: optionsValue)
 
-        case .ended:
-            let shouldResume = interruptedBySystem
-            interruptedBySystem = false
+        workQueue.async { [weak self] in
+            guard let self = self else { return }
+            
+            switch type {
+            case .began:
+                self.interruptedBySystem = self.synthesizer.isSpeaking || self.synthesizer.isPaused
+                self.isSessionActive = false
 
-            if shouldResume,
-               let options = info[AVAudioSessionInterruptionOptionKey] as? UInt,
-               AVAudioSession.InterruptionOptions(rawValue: options).contains(.shouldResume) {
-                activateSessionIfNeeded()
-                synthesizer.continueSpeaking()
-            } else if shouldResume {
-                stop()
+            case .ended:
+                let shouldResume = self.interruptedBySystem
+                self.interruptedBySystem = false
+
+                if shouldResume, options.contains(.shouldResume) {
+                    self.activateSessionIfNeeded()
+                    self.synthesizer.continueSpeaking()
+                } else if shouldResume {
+                    self.stopSynthesizerIfActive()
+                }
+
+            @unknown default:
+                break
             }
-
-        @unknown default:
-            break
         }
     }
 
@@ -252,20 +288,24 @@ final class TTSPlayer: NSObject {
               let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue) else { return }
 
         if reason == .oldDeviceUnavailable {
-            pause()
+            workQueue.async { [weak self] in
+                if self?.synthesizer.isSpeaking == true {
+                    self?.synthesizer.pauseSpeaking(at: .word)
+                }
+            }
         }
     }
 
     @objc private func handleDidEnterBackground() {
-        if synthesizer.isSpeaking || synthesizer.isPaused {
-            stop()
+        workQueue.async { [weak self] in
+            self?.stopSynthesizerIfActive()
         }
     }
 
-    // MARK: - Voice Selection
+    // MARK: - Voice Selection (仅在 workQueue 内调用)
 
     private func cachedVoice(for language: String?) -> AVSpeechSynthesisVoice? {
-        let lang = language ?? Locale.preferredLanguages.first ?? "en-US"
+        let lang = normalizedLanguage(language)
         if let cached = voiceCache[lang] { return cached }
         let voice = bestVoice(for: lang)
         if let voice = voice { voiceCache[lang] = voice }
@@ -298,11 +338,26 @@ final class TTSPlayer: NSObject {
 
     // MARK: - Helpers
 
-    private func onMainThread(_ block: @escaping () -> Void) {
+    private func normalizedLanguage(_ language: String?) -> String {
+        let lang = language ?? Locale.preferredLanguages.first ?? "en-US"
+        let trimmed = lang.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? "en-US" : trimmed
+    }
+
+    private func normalizedTextKey(_ text: String) -> String {
+        text
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\\s+", with: " ", options: .regularExpression)
+    }
+
+    /// 安全地向主线程抛出状态变更
+    private func updateStateOnMainThread(_ newState: State) {
         if Thread.isMainThread {
-            block()
+            self.state = newState
         } else {
-            DispatchQueue.main.async(execute: block)
+            DispatchQueue.main.async { [weak self] in
+                self?.state = newState
+            }
         }
     }
 }
@@ -312,24 +367,28 @@ final class TTSPlayer: NSObject {
 extension TTSPlayer: AVSpeechSynthesizerDelegate {
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didStart utterance: AVSpeechUtterance) {
-        state = .speaking(utterance.speechString)
+        updateStateOnMainThread(.speaking(utterance.speechString))
     }
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didFinish utterance: AVSpeechUtterance) {
-        state = .idle
-        scheduleDeactivation()
+        updateStateOnMainThread(.idle)
+        workQueue.async { [weak self] in
+            self?.scheduleDeactivation()
+        }
     }
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didCancel utterance: AVSpeechUtterance) {
-        state = .idle
-        scheduleDeactivation()
+        updateStateOnMainThread(.idle)
+        workQueue.async { [weak self] in
+            self?.scheduleDeactivation()
+        }
     }
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didPause utterance: AVSpeechUtterance) {
-        state = .paused
+        updateStateOnMainThread(.paused)
     }
 
     func speechSynthesizer(_ synthesizer: AVSpeechSynthesizer, didContinue utterance: AVSpeechUtterance) {
-        state = .speaking(utterance.speechString)
+        updateStateOnMainThread(.speaking(utterance.speechString))
     }
 }

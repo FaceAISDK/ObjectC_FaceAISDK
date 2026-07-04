@@ -59,7 +59,7 @@
 		7CB7AFF52FB6EC0A003E82D9 /* TTSPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TTSPlayer.swift; sourceTree = "<group>"; };
 		95FCDDDF937FE2F09B90634A /* Pods-ObjectC_FaceAISDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectC_FaceAISDK.debug.xcconfig"; path = "Target Support Files/Pods-ObjectC_FaceAISDK/Pods-ObjectC_FaceAISDK.debug.xcconfig"; sourceTree = "<group>"; };
 		B11C75461DEB65D99C165C15 /* Pods_ObjectC_FaceAISDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectC_FaceAISDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		CF65FF412EC4C57000FAC49A /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		CF2841F42FF8AF99009AEE74 /* README_zh-CN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "README_zh-CN.md"; sourceTree = "<group>"; };
 		CF7824C92EC33E3F002D143C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -78,7 +78,7 @@
 		7C0760962EC307F700302407 = {
 			isa = PBXGroup;
 			children = (
-				CF65FF412EC4C57000FAC49A /* README.md */,
+				CF2841F42FF8AF99009AEE74 /* README_zh-CN.md */,
 				7C0760A12EC307F700302407 /* ObjectC_FaceAISDK */,
 				7C0760A02EC307F700302407 /* Products */,
 				AC6415B278DD8F68510D62F4 /* Pods */,
@@ -178,8 +178,6 @@
 			dependencies = (
 			);
 			name = ObjectC_FaceAISDK;
-			packageProductDependencies = (
-			);
 			productName = ObjectC_FaceAISDK;
 			productReference = 7C07609F2EC307F700302407 /* ObjectC_FaceAISDK.app */;
 			productType = "com.apple.product-type.application";
@@ -208,8 +206,6 @@
 				Base,
 			);
 			mainGroup = 7C0760962EC307F700302407;
-			packageReferences = (
-			);
 			productRefGroup = 7C0760A02EC307F700302407 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";

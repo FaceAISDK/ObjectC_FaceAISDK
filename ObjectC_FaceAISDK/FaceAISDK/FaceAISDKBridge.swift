@@ -59,6 +59,7 @@ import UIKit
             motionLiveness: "1,2,3,4,5",
             motionLivenessTimeOut: 7,
             motionLivenessSteps: 2,
+            showResultTips: false,
             onDismiss: { code, liveness in
                 print("🎆 Liveness Result: \(code), Liveness Score: \(liveness)")
             }
