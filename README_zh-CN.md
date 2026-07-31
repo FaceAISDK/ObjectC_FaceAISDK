@@ -29,14 +29,14 @@ FaceAISDK_iOS 支持设备端完全离线，不需要联网即可实现人脸录
 
 SDK 最低支持 Xcode 15.2（Swift 5.9），已兼容 Xcode 26.5（Swift 6.3），支持 Swift 和 Objective-C。
 
-#### 1. 添加依赖
+#### 1. 添加依赖 
 
 <details>
 <summary><strong>Podfile 示例</strong></summary>
 
 ```ruby
-pod 'FaceAISDK_Core', :git => 'https://github.com/FaceAISDK/FaceAISDK_Core.git', :tag => '2026.07.01'
-# pod 'FaceAISDK_Core', '2026.07.01'
+pod 'FaceAISDK_Core', :git => 'https://github.com/FaceAISDK/FaceAISDK_Core.git', :tag => '2026.*******'
+# pod 'FaceAISDK_Core', '2026.*******'
 ```
 
 </details>
@@ -70,7 +70,7 @@ https://github.com/tensorflow/tensorflow/archive/refs/heads/master.zip
 ```text
 Updating local specs repositories
 Downloading dependencies
-Installing FaceAISDK_Core 2026.06.25
+Installing FaceAISDK_Core 2026.07.25
 [!] Error installing FaceAISDK_Core
 Cloning into '/var/folders/gh/p4wv4ytj4tn5xrhgq0n_jnbm0000gn/T/d20251020-8626-c57agm'...
 fatal: unable to access 'https://github.com/FaceAISDK/FaceAISDK_Core.git/': Error in the HTTP2 framing layer
@@ -84,7 +84,7 @@ fatal: unable to access 'https://github.com/FaceAISDK/FaceAISDK_Core.git/': Erro
 Thread 1: EXC BAD ACCESS (code=1, address=0x800008)
 ```
 
-请在 Xcode 菜单中选择 **Product** > **Clean Build Folder** / **Clean All Issues**，然后再次执行 pod 命令升级 FaceAISDK。
+请在 Xcode 菜单中选择 **Product** > **Clean Build Folder** / **Clean All Issues**，然后再次执行**pod update FaceAISDK_Core**升级 FaceAISDK。
 
 #### 6. Git 下载失败处理
 
@@ -110,11 +110,11 @@ git config --global https.postBuffer 987654321
 | 平台 | 链接 |
 | --- | --- |
 | iOS 纯 Swift | https://github.com/FaceAISDK/FaceAISDK_iOS |
-| iOS OC 混编 | https://github.com/FaceAISDK/FaceAISDK_iOS |
+| iOS OC 混编 | https://github.com/FaceAISDK/ObjectC_FaceAISDK |
 | Android | https://github.com/FaceAISDK/FaceAISDK_Android |
-| Flutter 插件 | https://github.com/FaceAISDK/FaceAISDK_Flutter_Plugin |
+| Flutter 插件 | https://github.com/FaceAISDK/FaceRecognition_Flutter |
 | uniApp UTS 插件 | https://github.com/FaceAISDK/FaceAISDK_uniapp_UTS |
-| React Native | https://github.com/FaceAISDK/FaceAISDK_RN |
+| React Native | https://github.com/FaceAISDK/FaceRecognition_ReactNative |
 
 **Email：** FaceAISDK.Service@gmail.com
 

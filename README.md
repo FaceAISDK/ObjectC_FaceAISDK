@@ -36,8 +36,8 @@ Minimum supported version: Xcode 15.2 (Swift 5.9). Compatible with Xcode 26.5 (S
 <summary><strong>Podfile snippet</strong></summary>
 
 ```ruby
-pod 'FaceAISDK_Core', :git => 'https://github.com/FaceAISDK/FaceAISDK_Core.git', :tag => '2026.07.01'
-# pod 'FaceAISDK_Core', '2026.07.01'
+pod 'FaceAISDK_Core', :git => 'https://github.com/FaceAISDK/FaceAISDK_Core.git', :tag => '2026.*******'
+# pod 'FaceAISDK_Core', '2026.*******'
 ```
 
 </details>
@@ -71,7 +71,7 @@ Example error when network access is restricted:
 ```text
 Updating local specs repositories
 Downloading dependencies
-Installing FaceAISDK_Core 2026.06.25
+Installing FaceAISDK_Core 2026.07.25
 [!] Error installing FaceAISDK_Core
 Cloning into '/var/folders/gh/p4wv4ytj4tn5xrhgq0n_jnbm0000gn/T/d20251020-8626-c57agm'...
 fatal: unable to access 'https://github.com/FaceAISDK/FaceAISDK_Core.git/': Error in the HTTP2 framing layer
@@ -85,7 +85,8 @@ If `TensorFlowLiteSwift` crashes and reports an error on first launch or after a
 Thread 1: EXC BAD ACCESS (code=1, address=0x800008)
 ```
 
-In Xcode, choose **Product** > **Clean Build Folder** / **Clean All Issues**, then run the pod command again to update FaceAISDK.
+In Xcode, choose **Product** > **Clean Build Folder** / **Clean All Issues**, then run **pod update FaceAISDK_Core**
+to update FaceAISDK.
 
 #### 6. Git transfer failures
 
@@ -106,16 +107,16 @@ git config --global http.postBuffer 987654321
 git config --global https.postBuffer 987654321
 ```
 
-### More Information
+### More Information 
 
 | Platform | Link |
 | --- | --- |
 | iOS Swift only | https://github.com/FaceAISDK/FaceAISDK_iOS |
-| iOS Objective-C mixed project | https://github.com/FaceAISDK/FaceAISDK_iOS |
+| iOS Objective-C| https://github.com/FaceAISDK/ObjectC_FaceAISDK |
 | Android | https://github.com/FaceAISDK/FaceAISDK_Android |
-| Flutter plugin | https://github.com/FaceAISDK/FaceAISDK_Flutter_Plugin |
+| Flutter plugin | https://github.com/FaceAISDK/FaceRecognition_Flutter |
 | uniApp UTS plugin | https://github.com/FaceAISDK/FaceAISDK_uniapp_UTS |
-| React Native | https://github.com/FaceAISDK/FaceAISDK_RN |
+| React Native | https://github.com/FaceAISDK/FaceRecognition_ReactNative |
 
 **Email:** FaceAISDK.Service@gmail.com
 

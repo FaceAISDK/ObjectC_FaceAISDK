@@ -14,6 +14,7 @@
 		7C0760AF2EC307F900302407 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C0760AE2EC307F900302407 /* Assets.xcassets */; };
 		7C0760B22EC307F900302407 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C0760B02EC307F900302407 /* LaunchScreen.storyboard */; };
 		7C0760B52EC307F900302407 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C0760B42EC307F900302407 /* main.m */; };
+		7C97CF9C301993360057167A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 7C97CF9B301993360057167A /* Localizable.xcstrings */; };
 		7CB7AFF62FB6EC0A003E82D9 /* CustomToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7AFE92FB6EC0A003E82D9 /* CustomToastView.swift */; };
 		7CB7AFF82FB6EC0A003E82D9 /* VerifyFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7AFEB2FB6EC0A003E82D9 /* VerifyFaceView.swift */; };
 		7CB7AFF92FB6EC0A003E82D9 /* AddFaceByCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7AFED2FB6EC0A003E82D9 /* AddFaceByCamera.swift */; };
@@ -46,6 +47,7 @@
 		7C0760B32EC307F900302407 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C0760B42EC307F900302407 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7C313AAE2FB7131A00139DB1 /* ObjectC_FaceAISDK-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjectC_FaceAISDK-Bridging-Header.h"; sourceTree = "<group>"; };
+		7C97CF9B301993360057167A /* Localizable.xcstrings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		7CB7AFE92FB6EC0A003E82D9 /* CustomToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomToastView.swift; sourceTree = "<group>"; };
 		7CB7AFEB2FB6EC0A003E82D9 /* VerifyFaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyFaceView.swift; sourceTree = "<group>"; };
 		7CB7AFED2FB6EC0A003E82D9 /* AddFaceByCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFaceByCamera.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				7C0760A82EC307F700302407 /* ViewController.h */,
 				CF7824C92EC33E3F002D143C /* Localizable.xcstrings */,
 				7C0760A92EC307F700302407 /* ViewController.m */,
+				7C97CF9B301993360057167A /* Localizable.xcstrings */,
 				7C0760AB2EC307F700302407 /* Main.storyboard */,
 				7C0760AE2EC307F900302407 /* Assets.xcassets */,
 				7C0760B02EC307F900302407 /* LaunchScreen.storyboard */,
@@ -221,6 +224,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C0760B22EC307F900302407 /* LaunchScreen.storyboard in Resources */,
+				7C97CF9C301993360057167A /* Localizable.xcstrings in Resources */,
 				7C0760AF2EC307F900302407 /* Assets.xcassets in Resources */,
 				CF7824CA2EC33E3F002D143C /* Localizable.xcstrings in Resources */,
 				7C0760AD2EC307F700302407 /* Main.storyboard in Resources */,
@@ -238,13 +242,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ObjectC_FaceAISDK/Pods-ObjectC_FaceAISDK-resources-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Copy Pods Resources";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ObjectC_FaceAISDK/Pods-ObjectC_FaceAISDK-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -259,13 +259,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ObjectC_FaceAISDK/Pods-ObjectC_FaceAISDK-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-ObjectC_FaceAISDK/Pods-ObjectC_FaceAISDK-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
