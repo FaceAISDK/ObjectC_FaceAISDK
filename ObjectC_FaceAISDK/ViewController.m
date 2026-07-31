@@ -11,6 +11,7 @@
 #import "ObjectC_FaceAISDK-Swift.h"
 
 @interface ViewController ()
+@property (nonatomic, strong, nullable) UIView *resultToastView;
 @end
 
 @implementation ViewController
@@ -54,31 +55,120 @@
     }
 }
 
+// Show a result toast using the same success/failure colors as FaceAINaviView.
+// 使用与 FaceAINaviView 一致的成功/失败颜色显示结果 Toast。
+- (void)showResultToastWithMessage:(NSString *)message success:(BOOL)success {
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self.resultToastView.layer removeAllAnimations];
+        [self.resultToastView removeFromSuperview];
+
+        UIView *toastView = [[UIView alloc] init];
+        toastView.translatesAutoresizingMaskIntoConstraints = NO;
+        toastView.backgroundColor = success
+            ? ([UIColor colorNamed:@"FaceMainColor"] ?: [UIColor systemGreenColor])
+            : [UIColor systemRedColor];
+        toastView.layer.cornerRadius = 25.0;
+        toastView.layer.shadowColor = [UIColor blackColor].CGColor;
+        toastView.layer.shadowOpacity = 0.2;
+        toastView.layer.shadowRadius = 5.0;
+        toastView.layer.shadowOffset = CGSizeMake(0, 2);
+        toastView.alpha = 0.0;
+
+        UILabel *messageLabel = [[UILabel alloc] init];
+        messageLabel.translatesAutoresizingMaskIntoConstraints = NO;
+        messageLabel.text = message.length > 0 ? message : (success ? @"Success" : @"Failed");
+        messageLabel.textColor = [UIColor whiteColor];
+        messageLabel.font = [UIFont boldSystemFontOfSize:19.0];
+        messageLabel.textAlignment = NSTextAlignmentCenter;
+        messageLabel.numberOfLines = 0;
+
+        [toastView addSubview:messageLabel];
+        [self.view addSubview:toastView];
+        [NSLayoutConstraint activateConstraints:@[
+            [messageLabel.topAnchor constraintEqualToAnchor:toastView.topAnchor constant:14.0],
+            [messageLabel.leadingAnchor constraintEqualToAnchor:toastView.leadingAnchor constant:22.0],
+            [messageLabel.trailingAnchor constraintEqualToAnchor:toastView.trailingAnchor constant:-22.0],
+            [messageLabel.bottomAnchor constraintEqualToAnchor:toastView.bottomAnchor constant:-14.0],
+            [toastView.centerXAnchor constraintEqualToAnchor:self.view.centerXAnchor],
+            [toastView.bottomAnchor constraintEqualToAnchor:self.view.safeAreaLayoutGuide.bottomAnchor constant:-24.0],
+            [toastView.widthAnchor constraintLessThanOrEqualToAnchor:self.view.widthAnchor multiplier:0.9]
+        ]];
+
+        self.resultToastView = toastView;
+        [UIView animateWithDuration:0.25 animations:^{
+            toastView.alpha = 1.0;
+        }];
+
+        dispatch_after(
+            dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.5 * NSEC_PER_SEC)),
+            dispatch_get_main_queue(),
+            ^{
+                if (self.resultToastView != toastView) {
+                    return;
+                }
+                [UIView animateWithDuration:0.25
+                    animations:^{
+                        toastView.alpha = 0.0;
+                    }
+                    completion:^(BOOL finished) {
+                        [toastView removeFromSuperview];
+                        if (self.resultToastView == toastView) {
+                            self.resultToastView = nil;
+                        }
+                    }];
+            }
+        );
+    });
+}
+
+// Wait for the presented feature page to dismiss before revealing its result.
+// 等待功能页面关闭后再显示返回结果。
+- (void)showFlowResultToastWithMessage:(NSString *)message success:(BOOL)success {
+    dispatch_after(
+        dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.35 * NSEC_PER_SEC)),
+        dispatch_get_main_queue(),
+        ^{
+            [self showResultToastWithMessage:message success:success];
+        }
+    );
+}
+
 - (void)menuTapped:(UIButton *)sender {
     // Create the selected SwiftUI feature through FaceAISDKBridge.
     // 通过 FaceAISDKBridge 创建选中的 SwiftUI 功能页面。
     UIViewController *vc = nil;
+    __weak typeof(self) weakSelf = self;
     switch (sender.tag) {
-        case 0:
-            vc = [FaceAISDKBridge addFaceByCameraViewController];
+        case 0: {
+            vc = [FaceAISDKBridge addFaceByCameraViewControllerWithResultHandler:^(BOOL success, NSString *message) {
+                [weakSelf showFlowResultToastWithMessage:message success:success];
+            }];
             break;
-        case 1:
-            vc = [FaceAISDKBridge addFaceByImageViewController];
+        }
+        case 1: {
+            vc = [FaceAISDKBridge addFaceByImageViewControllerWithResultHandler:^(BOOL success, NSString *message) {
+                [weakSelf showFlowResultToastWithMessage:message success:success];
+            }];
             break;
-        case 2:
-            vc = [FaceAISDKBridge verifyFaceViewController];
+        }
+        case 2: {
+            vc = [FaceAISDKBridge verifyFaceViewControllerWithResultHandler:^(BOOL success, NSString *message) {
+                [weakSelf showFlowResultToastWithMessage:message success:success];
+            }];
             break;
-        case 3:
-            vc = [FaceAISDKBridge livenessDetectViewController];
+        }
+        case 3: {
+            vc = [FaceAISDKBridge livenessDetectViewControllerWithResultHandler:^(BOOL success, NSString *message) {
+                [weakSelf showFlowResultToastWithMessage:message success:success];
+            }];
             break;
+        }
         case 4: {
             // Face features are stored by faceID after a successful enrollment.
             // 人脸录入成功后，特征值会按 faceID 保存。
             NSString *feature = [FaceAISDKBridge isFaceFeatureExist];
-            NSString *msg = feature ? [NSString stringWithFormat:@"Feature: %@", feature] : @"No face feature found!";
-            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Face Feature" message:msg preferredStyle:UIAlertControllerStyleAlert];
-            [alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-            [self presentViewController:alert animated:YES completion:nil];
+            NSString *message = feature ? @"Face feature exists." : @"No face feature found!";
+            [self showResultToastWithMessage:message success:(feature != nil)];
             return;
         }
         case 5:

@@ -5,15 +5,25 @@ import UIKit
 @objc public class FaceAISDKBridge: NSObject {
 
     private static let faceID = "yourFaceID"
+    private static let similarityThreshold: Float = 0.83
+    private static let silentLivenessThreshold: Float = 0.75
 
     // MARK: - 1. Add Face By Camera
     @objc public static func addFaceByCameraViewController() -> UIViewController {
+        addFaceByCameraViewController(resultHandler: { _, _ in })
+    }
+
+    @objc(addFaceByCameraViewControllerWithResultHandler:)
+    public static func addFaceByCameraViewController(
+        resultHandler: @escaping (Bool, String) -> Void
+    ) -> UIViewController {
         let view = AddFaceByCamera(
             faceID: faceID,
             addFacePerformanceMode: 1,
             needShowConfirmDialog: true,
             onDismiss: { result, feature, message in
                 print("🎆 AddFace Status: \(result), Feature: \(feature), Message: \(message)")
+                resultHandler(result == 1, message)
             }
         )
         return UIHostingController(rootView: view)
@@ -21,10 +31,18 @@ import UIKit
 
     // MARK: - 2. Add Face From Album
     @objc public static func addFaceByImageViewController() -> UIViewController {
+        addFaceByImageViewController(resultHandler: { _, _ in })
+    }
+
+    @objc(addFaceByImageViewControllerWithResultHandler:)
+    public static func addFaceByImageViewController(
+        resultHandler: @escaping (Bool, String) -> Void
+    ) -> UIViewController {
         let view = AddFaceByImage(
             faceID: faceID,
             onDismiss: { result, feature, message in
                 print("🎆 AddFace Status: \(result), Feature: \(feature), Message: \(message)")
+                resultHandler(result == 1, message)
             }
         )
         return UIHostingController(rootView: view)
@@ -32,9 +50,16 @@ import UIKit
 
     // MARK: - 3. Face Verify & Liveness
     @objc public static func verifyFaceViewController() -> UIViewController {
+        verifyFaceViewController(resultHandler: { _, _ in })
+    }
+
+    @objc(verifyFaceViewControllerWithResultHandler:)
+    public static func verifyFaceViewController(
+        resultHandler: @escaping (Bool, String) -> Void
+    ) -> UIViewController {
         let view = VerifyFaceView(
             faceID: faceID,
-            threshold: 0.83, // Threshold range [0.8, 0.9].  阈值范围【0.8，0.9】
+            threshold: similarityThreshold, // Threshold range [0.8, 0.9].  阈值范围【0.8，0.9】
             
             // 1. Motion Liveness, 2. Motion + Color, 3. Color, 4. Silent Liveness only (the first three all include silent liveness).
             // 1.动作活体 2.动作+炫彩 3.炫彩 4.仅静默活体(前三种都会带静默)。
@@ -50,6 +75,13 @@ import UIKit
                     "🎆 Face Verify Status: \(code), Similarity: \(similarity), "
                         + "Liveness: \(liveness), Message: \(message)"
                 )
+                let isSuccess =
+                    similarity > similarityThreshold
+                    && liveness > silentLivenessThreshold
+                let fullMessage =
+                    "\(message), Liveness: \(String(format: "%.2f", liveness)), "
+                    + "Similarity: \(String(format: "%.2f", similarity))"
+                resultHandler(isSuccess, fullMessage)
             }
         )
         return UIHostingController(rootView: view)
@@ -57,6 +89,13 @@ import UIKit
 
     // MARK: - 4. Liveness Detection Only
     @objc public static func livenessDetectViewController() -> UIViewController {
+        livenessDetectViewController(resultHandler: { _, _ in })
+    }
+
+    @objc(livenessDetectViewControllerWithResultHandler:)
+    public static func livenessDetectViewController(
+        resultHandler: @escaping (Bool, String) -> Void
+    ) -> UIViewController {
         let view = LivenessDetectView(
             livenessType: 2,
             motionLiveness: "1,2,3,4,5",
@@ -64,6 +103,8 @@ import UIKit
             motionLivenessSteps: 2,
             onDismiss: { code, liveness, message in
                 print("🎆 Liveness Result: \(code), Liveness Score: \(liveness), Message: \(message)")
+                let fullMessage = "\(message), Liveness: \(String(format: "%.2f", liveness))"
+                resultHandler(liveness > silentLivenessThreshold, fullMessage)
             }
         )
         return UIHostingController(rootView: view)
