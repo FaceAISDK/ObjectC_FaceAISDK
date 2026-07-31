@@ -53,7 +53,7 @@ struct FaceAINaviView: View {
                                     }
                                 )
                             ) {
-                                MenuRowView(icon: "camera.viewfinder", title: "Add Face By Camera")
+                                MenuRowView(icon: "camera.viewfinder", title: "Enroll Face By Camera")
                             }
 
                             NavigationLink(
@@ -66,7 +66,7 @@ struct FaceAINaviView: View {
                                     }
                                 )
                             ) {
-                                MenuRowView(icon: "photo.on.rectangle.angled", title: "Add Face From Album")
+                                MenuRowView(icon: "photo.on.rectangle.angled", title: "Enroll Face From Album")
                             }
                         }
                         .padding(.top, 16)
@@ -113,7 +113,7 @@ struct FaceAINaviView: View {
                                 )
                             ) {
                                 MenuRowView(
-                                    icon: "person.crop.circle.badge.checkmark", title: "ONLY Liveness Detection")
+                                    icon: "person.crop.circle.badge.checkmark", title: "Liveness Detection Only")
                             }
                         }
 
@@ -132,7 +132,7 @@ struct FaceAINaviView: View {
                             }
 
                             NavigationLink(destination: VerifyTwoFaceSimiView()) {
-                                MenuRowView(icon: "person.2.crop.square.stack", title: "Verify Two Face Similarity")
+                                MenuRowView(icon: "person.2.crop.square.stack", title: "Compare Two Faces")
                             }
                         }
 
@@ -176,9 +176,9 @@ struct FaceAINaviView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button(action: {
+                        // Dismiss only this navigation page and return to its presenter.
+                        // 仅关闭当前导航页面并返回上一个展示页面。
                         onDismiss?()
-                        UIControl().sendAction(
-                            #selector(URLSessionTask.suspend), to: UIApplication.shared, for: nil)
                     }) {
                         Image(systemName: "xmark")
                             .font(.system(size: 13, weight: .bold))

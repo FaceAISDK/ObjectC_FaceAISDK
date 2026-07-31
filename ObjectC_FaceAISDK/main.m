@@ -11,7 +11,8 @@
 int main(int argc, char * argv[]) {
     NSString * appDelegateClassName;
     @autoreleasepool {
-        // Setup code that might create autoreleased objects goes here.
+        // Resolve the application delegate class inside the autorelease pool.
+        // 在自动释放池中获取应用代理类。
         appDelegateClassName = NSStringFromClass([AppDelegate class]);
     }
     return UIApplicationMain(argc, argv, nil, appDelegateClassName);

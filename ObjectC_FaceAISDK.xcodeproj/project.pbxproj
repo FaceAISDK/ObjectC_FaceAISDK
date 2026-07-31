@@ -14,7 +14,7 @@
 		7C0760AF2EC307F900302407 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7C0760AE2EC307F900302407 /* Assets.xcassets */; };
 		7C0760B22EC307F900302407 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7C0760B02EC307F900302407 /* LaunchScreen.storyboard */; };
 		7C0760B52EC307F900302407 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 7C0760B42EC307F900302407 /* main.m */; };
-		7C97CF9C301993360057167A /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 7C97CF9B301993360057167A /* Localizable.xcstrings */; };
+		7C97CF9C301993360057167A /* .xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = 7C97CF9B301993360057167A /* .xcstrings */; };
 		7CB7AFF62FB6EC0A003E82D9 /* CustomToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7AFE92FB6EC0A003E82D9 /* CustomToastView.swift */; };
 		7CB7AFF82FB6EC0A003E82D9 /* VerifyFaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7AFEB2FB6EC0A003E82D9 /* VerifyFaceView.swift */; };
 		7CB7AFF92FB6EC0A003E82D9 /* AddFaceByCamera.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7AFED2FB6EC0A003E82D9 /* AddFaceByCamera.swift */; };
@@ -28,7 +28,7 @@
 		7CB7B0012FB6EC0A003E82D9 /* TTSPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB7AFF52FB6EC0A003E82D9 /* TTSPlayer.swift */; };
 		86FDF3E16C2EE3CF985F6FAC /* Pods_ObjectC_FaceAISDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B11C75461DEB65D99C165C15 /* Pods_ObjectC_FaceAISDK.framework */; };
 		A96663B325D9DBA6E7D19814 /* FaceAISDKBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3723756DF60B84014A9482CF /* FaceAISDKBridge.swift */; };
-		CF7824CA2EC33E3F002D143C /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = CF7824C92EC33E3F002D143C /* Localizable.xcstrings */; };
+		CFC30B4E301C7A6900DE1F91 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = CFC30B4D301C7A6900DE1F91 /* Localizable.xcstrings */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,7 +47,7 @@
 		7C0760B32EC307F900302407 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7C0760B42EC307F900302407 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		7C313AAE2FB7131A00139DB1 /* ObjectC_FaceAISDK-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "ObjectC_FaceAISDK-Bridging-Header.h"; sourceTree = "<group>"; };
-		7C97CF9B301993360057167A /* Localizable.xcstrings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		7C97CF9B301993360057167A /* .xcstrings */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .xcstrings; sourceTree = "<group>"; };
 		7CB7AFE92FB6EC0A003E82D9 /* CustomToastView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomToastView.swift; sourceTree = "<group>"; };
 		7CB7AFEB2FB6EC0A003E82D9 /* VerifyFaceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = VerifyFaceView.swift; sourceTree = "<group>"; };
 		7CB7AFED2FB6EC0A003E82D9 /* AddFaceByCamera.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddFaceByCamera.swift; sourceTree = "<group>"; };
@@ -62,7 +62,8 @@
 		95FCDDDF937FE2F09B90634A /* Pods-ObjectC_FaceAISDK.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ObjectC_FaceAISDK.debug.xcconfig"; path = "Target Support Files/Pods-ObjectC_FaceAISDK/Pods-ObjectC_FaceAISDK.debug.xcconfig"; sourceTree = "<group>"; };
 		B11C75461DEB65D99C165C15 /* Pods_ObjectC_FaceAISDK.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ObjectC_FaceAISDK.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF2841F42FF8AF99009AEE74 /* README_zh-CN.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = "README_zh-CN.md"; sourceTree = "<group>"; };
-		CF7824C92EC33E3F002D143C /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		CFC30B4C301C757100DE1F91 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		CFC30B4D301C7A6900DE1F91 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +82,7 @@
 			isa = PBXGroup;
 			children = (
 				CF2841F42FF8AF99009AEE74 /* README_zh-CN.md */,
+				CFC30B4C301C757100DE1F91 /* README.md */,
 				7C0760A12EC307F700302407 /* ObjectC_FaceAISDK */,
 				7C0760A02EC307F700302407 /* Products */,
 				AC6415B278DD8F68510D62F4 /* Pods */,
@@ -106,9 +108,9 @@
 				7C0760A52EC307F700302407 /* SceneDelegate.h */,
 				7C0760A62EC307F700302407 /* SceneDelegate.m */,
 				7C0760A82EC307F700302407 /* ViewController.h */,
-				CF7824C92EC33E3F002D143C /* Localizable.xcstrings */,
+				CFC30B4D301C7A6900DE1F91 /* Localizable.xcstrings */,
 				7C0760A92EC307F700302407 /* ViewController.m */,
-				7C97CF9B301993360057167A /* Localizable.xcstrings */,
+				7C97CF9B301993360057167A /* .xcstrings */,
 				7C0760AB2EC307F700302407 /* Main.storyboard */,
 				7C0760AE2EC307F900302407 /* Assets.xcassets */,
 				7C0760B02EC307F900302407 /* LaunchScreen.storyboard */,
@@ -224,9 +226,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				7C0760B22EC307F900302407 /* LaunchScreen.storyboard in Resources */,
-				7C97CF9C301993360057167A /* Localizable.xcstrings in Resources */,
+				CFC30B4E301C7A6900DE1F91 /* Localizable.xcstrings in Resources */,
+				7C97CF9C301993360057167A /* .xcstrings in Resources */,
 				7C0760AF2EC307F900302407 /* Assets.xcassets in Resources */,
-				CF7824CA2EC33E3F002D143C /* Localizable.xcstrings in Resources */,
 				7C0760AD2EC307F700302407 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

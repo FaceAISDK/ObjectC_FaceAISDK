@@ -4,10 +4,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface LogCustomTools : NSObject
 
-// 1. 实例方法（需要 new 一个对象才能调用）
+/// Prints a message through an instance method.
+/// 通过实例方法打印消息。
 - (void)printInstanceLog:(NSString *)message;
 
-// 2. 类方法 / 静态方法（可以直接用类名调用，更方便）
+/// Prints a message directly through the class method.
+/// 直接通过类方法打印消息。
 + (void)printClassLog:(NSString *)message;
 
 @end

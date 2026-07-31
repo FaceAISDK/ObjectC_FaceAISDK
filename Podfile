@@ -12,17 +12,3 @@ target 'ObjectC_FaceAISDK' do
 
 end
 
-# 将所有的 post_install 逻辑合并到一个 block 中
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-
-      # 针对特定 Target (FaceAISDK_Core) 的配置
-      if target.name == 'FaceAISDK_Core'
-        # 确保分发库编译选项在 Pod 目标中生效 (解决 Swift Module 稳定性报错)
-        config.build_settings['BUILD_LIBRARY_FOR_DISTRIBUTION'] = 'YES'
-      end
-      
-    end
-  end
-end

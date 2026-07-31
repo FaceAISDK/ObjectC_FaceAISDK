@@ -1,24 +1,26 @@
- 如果运行出现以下错误
- ```
- Swift/Integers.swift:3564: Fatal error: Not enough bits to represent the passed value  
- ```
- 请在Xcode菜单Product执行clean all Issues后 再次执行pod命令升级FaceAISDK就可以了。
- ```
-  pod update FaceAISDK_Core 
- ```
+
+## V2026.07.30
+- Initial adaptation for iOS 27 has been completed.
+- silentLivenessThreshold [0.75,0.95]
+
+## V2026.07.27
+- Optimize the stability of Silent passive liveness detection
+- update for flutter RN plugin
+- update silent failed tips
+- support retry when failed
+- support no need liveness
  
-## 更新说明 V2026.07.01
+## V2026.07.01
 - 添加中英文支持
 - 缩减SDK体积，优化性能
+
  
- 
-## 更新说明 V2026.06.01
+## V2026.06.01
 - 适配三方插件更多参数控制
 - 人脸初始化没有进入镜头画面不校验是否无人脸避免一打开人脸识别就停止
-- 静默活体距离调整，通过分数从0.75降到0.72
  
  
-## 更新说明 V2026.04.02
+## V2026.04.02
 - 添加人脸运行可不需要确认框
 - 静默活体通过阈值降低到0.8
  
@@ -88,3 +90,6 @@
 
 ## V2025.05.31
 - 废弃Object C SDK 接入Demo示范，规划Swift实现
+
+## V2024.12.31
+- init

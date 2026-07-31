@@ -1,5 +1,6 @@
 //
-//  Use this file to import your target's public headers that you would like to expose to Swift.当前未使用
+//  Import Objective-C public headers here when they need to be exposed to Swift.
+//  需要向 Swift 暴露 Objective-C 公共头文件时，在此处导入。
 //
 
 #import "LogCustomTools.h"

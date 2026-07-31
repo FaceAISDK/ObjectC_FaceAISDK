@@ -12,8 +12,8 @@ import UIKit
             faceID: faceID,
             addFacePerformanceMode: 1,
             needShowConfirmDialog: true,
-            onDismiss: { result, feature in
-                print("🎆 AddFace Status: \(result), Feature: \(feature)")
+            onDismiss: { result, feature, message in
+                print("🎆 AddFace Status: \(result), Feature: \(feature), Message: \(message)")
             }
         )
         return UIHostingController(rootView: view)
@@ -23,8 +23,8 @@ import UIKit
     @objc public static func addFaceByImageViewController() -> UIViewController {
         let view = AddFaceByImage(
             faceID: faceID,
-            onDismiss: { result, feature in
-                print("🎆 AddFace Status: \(result), Feature: \(feature ?? "")")
+            onDismiss: { result, feature, message in
+                print("🎆 AddFace Status: \(result), Feature: \(feature), Message: \(message)")
             }
         )
         return UIHostingController(rootView: view)
@@ -45,8 +45,11 @@ import UIKit
             motionLiveness: "1,2,3,4,5",
             motionLivenessTimeOut: 9,
             motionLivenessSteps: 2,
-            onDismiss: { code, similarity, liveness in
-                print("🎆 Face Verify Status: \(code), Similarity: \(similarity), Liveness: \(liveness)")
+            onDismiss: { code, similarity, liveness, message in
+                print(
+                    "🎆 Face Verify Status: \(code), Similarity: \(similarity), "
+                        + "Liveness: \(liveness), Message: \(message)"
+                )
             }
         )
         return UIHostingController(rootView: view)
@@ -59,9 +62,8 @@ import UIKit
             motionLiveness: "1,2,3,4,5",
             motionLivenessTimeOut: 7,
             motionLivenessSteps: 2,
-            showResultTips: false,
-            onDismiss: { code, liveness in
-                print("🎆 Liveness Result: \(code), Liveness Score: \(liveness)")
+            onDismiss: { code, liveness, message in
+                print("🎆 Liveness Result: \(code), Liveness Score: \(liveness), Message: \(message)")
             }
         )
         return UIHostingController(rootView: view)
@@ -85,10 +87,12 @@ import UIKit
 
     // MARK: - 7. Full Navigation View (original FaceAINaviView)
     @objc public static func faceAINaviViewController() -> UIViewController {
-        let hostingController = UIHostingController(rootView: FaceAINaviView())
-        hostingController.rootView = FaceAINaviView(onDismiss: { [weak hostingController] in
+        var rootView = FaceAINaviView()
+        let hostingController = UIHostingController(rootView: rootView)
+        rootView.onDismiss = { [weak hostingController] in
             hostingController?.dismiss(animated: true)
-        })
+        }
+        hostingController.rootView = rootView
         return hostingController
     }
 }

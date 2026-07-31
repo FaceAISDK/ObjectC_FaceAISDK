@@ -7,8 +7,9 @@
 
 #import <UIKit/UIKit.h>
 
+/// Configures application-level lifecycle behavior.
+/// 配置应用级生命周期行为。
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 
 @end
-
