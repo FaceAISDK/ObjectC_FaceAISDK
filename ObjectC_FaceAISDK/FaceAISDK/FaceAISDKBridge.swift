@@ -97,7 +97,7 @@ import UIKit
         resultHandler: @escaping (Bool, String) -> Void
     ) -> UIViewController {
         let view = LivenessDetectView(
-            livenessType: 2,
+            livenessType: 1,
             motionLiveness: "1,2,3,4,5",
             motionLivenessTimeOut: 7,
             motionLivenessSteps: 2,

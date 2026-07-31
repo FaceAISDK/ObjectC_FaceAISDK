@@ -9,7 +9,8 @@ struct FaceAINaviView: View {
     // Use a stable business identifier, such as an account or ID number. 使用账号或证件号等稳定业务标识。
     private let faceID = "yourFaceID"
 
-    //silent liveness threshold(0.85-0.95)
+    ///Silent liveness threshold (iOS/Android): 0.85–0.95. Actual performance varies with camera and lighting—adjust based on scenario.
+    ///iOS Android 静默活体通过阈值范围0.85到0.95，注意实际表现和摄像头&环境有关
     private var silentLivenessThreshold: Float = 0.85
 
     @State private var showToast = false

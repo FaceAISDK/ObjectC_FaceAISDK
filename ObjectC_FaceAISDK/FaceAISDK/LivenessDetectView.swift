@@ -4,6 +4,9 @@ import AVFoundation
 import FaceAISDK_Core
 import SwiftUI
 
+
+///Silent liveness threshold (iOS/Android): 0.85–0.95. Actual performance varies with camera and lighting—adjust based on scenario.
+///iOS Android 静默活体通过阈值范围0.85到0.95，注意实际表现和摄像头&环境有关
 /// Liveness Detection (Supports motion, color flash, and silent liveness)
 /// UI style is for reference only and can be adjusted according to your business needs
 /// 活体检测（支持动作活体，炫彩活体，静默活体）UI 样式仅供参考，根据你的业务可自行调整
