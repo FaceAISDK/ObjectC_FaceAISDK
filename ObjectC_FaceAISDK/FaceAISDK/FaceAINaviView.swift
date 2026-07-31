@@ -9,8 +9,8 @@ struct FaceAINaviView: View {
     // Use a stable business identifier, such as an account or ID number. 使用账号或证件号等稳定业务标识。
     private let faceID = "yourFaceID"
 
-    //silentLivenessThreshold[0.75,0.95]
-    private var silentLivenessThreshold: Float = 0.75
+    //silent liveness threshold(0.85-0.95)
+    private var silentLivenessThreshold: Float = 0.85
 
     @State private var showToast = false
     @State private var toastMessage = ""
@@ -98,7 +98,7 @@ struct FaceAINaviView: View {
 
                             NavigationLink(
                                 destination: LivenessDetectView(
-                                    livenessType: 1,
+                                    livenessType: 4,
                                     motionLiveness: "1,2,3,4,5",
                                     motionLivenessTimeOut: 7,
                                     motionLivenessSteps: 2,
